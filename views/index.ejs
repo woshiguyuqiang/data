@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>主页面</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <style>
+    	*{list-style: none;}
+    	ul{
+    		background-color: pink;
+    		margin: 0;
+    		padding: 0;
+    	}
+	</style>
+  </head>
+  <body>
+  	<ul id="show">
+  		<%for(var i=0;i<list.length;i++){%>
+  		<li><%=list[i].id%>&nbsp&nbsp&nbsp<%=list[i].name%></li>
+  		<%}%>
+  	</ul>
+    <p><input type="text" id="tadd"> <input type=button value="添加" id="add"/></p>
+    <p><input type="text" id="tdel"> <input type=button value="删除" id="del"/></p>
+    <p>键：<input type="text" id="tkey">
+       值：<input type="text" id="tval">
+       <input type=button value="修改" id="updata"/>
+    </p>
+    <p><input type="text" id="sel"> <input type=button value="查询" id="select"/> <input type=button value="查询全部" id="selectAll"/></p>
+
+
+
+    <p id="results"><b>Results: </b> </p>
+<form>
+  <select name="single">
+    <option>Single</option>
+    <option>Single2</option>
+  </select>
+  <select name="multiple" multiple="multiple">
+    <option selected="selected">Multiple</option>
+    <option>Multiple2</option>
+    <option selected="selected">Multiple3</option>
+  </select><br/>
+  <input type="checkbox" name="check" value="check1"/> check1
+  <input type="checkbox" name="check" value="check2" checked="checked"/> check2
+  <input type="radio" name="radio" value="radio1" checked="checked"/> radio1
+  <input type="radio" name="radio" value="radio2"/> radio2
+</form>
+  </body>
+</html>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
+<script>
+	var res={
+		"name" : "哈哈",
+		"age" : 123
+	};
+	console.log($.param(res));
+	$("#results").append( "<tt>" + $("form").serialize() + "</tt>" );
+</script>
+<script>
+	$("#add").click(function(){
+		$.get("http://localhost:3000/add/"+$("#tadd").val(),function(res){
+			if(res.res){
+				alert("插入数据成功");
+				location.reload();
+			}else{
+				alert("插入数据失败");
+			}
+		})
+	})
+	$("#del").click(function(){
+		$.get("http://localhost:3000/del/"+$("#tdel").val(),function(res){
+			if(res.res){
+				alert("删除数据成功");
+				location.reload();
+			}else{
+				alert("删除数据失败");
+			}
+		})
+	})
+	$("#select").click(function(){
+		$.get("http://localhost:3000/select/"+$("#sel").val(),function(res){
+			$("#show").html(res);
+		})
+	})
+	$("#updata").click(function(){
+		$.get("http://localhost:3000/updata/"+$("#tkey").val()+"/"+$("#tval").val(),function(res){
+			if(res.res){
+				alert("修改数据成功");
+				location.reload();
+			}else{
+				alert("修改数据失败");
+			}
+		})
+	})
+	$("#selectAll").click(function(){
+		$.get("http://localhost:3000/selAll",function(res){
+			$("#show").html(res);
+		});
+	})
+</script>
